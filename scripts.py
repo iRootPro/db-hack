@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from datacenter.models import *
 
 
-def get_info_for_child(name):
+def get_child(name):
     try:
         child = Schoolkid.objects.get(full_name__contains=name)
     except Schoolkid.DoesNotExist:
@@ -15,7 +15,7 @@ def get_info_for_child(name):
 
 
 def fix_marks(schoolkid):
-    child = get_info_for_child(schoolkid)
+    child = get_child(schoolkid)
     marks = Mark.objects.filter(schoolkid=child, points__lt=4)
     for mark in marks:
         mark.points = 5
@@ -23,13 +23,13 @@ def fix_marks(schoolkid):
 
 
 def remove_chastisements(schoolkid):
-    child = get_info_for_child(schoolkid)
+    child = get_child(schoolkid)
     chastiments = Chastisement.objects.filter(schoolkid=child)
     chastiments.delete()
 
 
 def get_last_lesson_subject_for_child(child, subject):
-    child = get_info_for_child(schoolkid)
+    child = get_for_child(schoolkid)
     lessons = Lesson.objects.filter(
         year_of_study=child.year_of_study, group_letter=child.group_letter)
     last_lesson = lessons.filter(
