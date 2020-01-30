@@ -8,9 +8,9 @@ def get_child(name):
     try:
         child_info = Schoolkid.objects.get(full_name__contains=name)
     except Schoolkid.DoesNotExist:
-        print('Введено не верное имя. Введите фамилию и имя полностью')
+        return 'Такого ученика нет. Введите фамилию и имя полностью.'
     except Schoolkid.MultipleObjectsReturned:
-        print('Найдено несколько учеников по вашему запросу. Уточните запрос')
+        return 'Найдено несколько учеников по вашему запросу. Уточните запрос'
     return child_info
 
 
@@ -45,7 +45,7 @@ def create_commendation(child, subject):
         'Сказано здорово – просто и ясно!', 'Ты, как всегда, точен!',
         'Очень хороший ответ!', 'Талантливо!',
         'Ты сегодня прыгнул выше головы!', 'Я поражен!'
-        ]
+    ]
     random_commetation = random.choice(commedtations_for_child)
     last_lesson = get_last_lesson_subject_for_child(child, subject)
     Commendation.objects.create(
