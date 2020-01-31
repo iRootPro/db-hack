@@ -8,28 +8,27 @@ def get_child(name):
     try:
         child_info = Schoolkid.objects.get(full_name__contains=name)
     except Schoolkid.DoesNotExist:
-        return 'Такого ученика нет. Введите фамилию и имя полностью.'
+        print('Такого ученика нет. Введите фамилию и имя полностью.')
+        return
     except Schoolkid.MultipleObjectsReturned:
-        return 'Найдено несколько учеников по вашему запросу. Уточните запрос'
+        print('Найдено несколько учеников по вашему запросу. Уточните запрос')
+        return
     return child_info
 
 
 def fix_marks(schoolkid):
-    child_info = get_child(schoolkid)
-    marks = Mark.objects.filter(schoolkid=child_info, points__lt=4)
+    marks = Mark.objects.filter(schoolkid=schoolkid, points__lt=4)
     for mark in marks:
         mark.points = 5
         mark.save()
 
 
 def remove_chastisements(schoolkid):
-    child_info = get_child(schoolkid)
-    chastiments = Chastisement.objects.filter(schoolkid=child_info)
+    chastiments = Chastisement.objects.filter(schoolkid=schoolkid)
     chastiments.delete()
 
 
 def get_last_lesson_subject_for_child(child, subject):
-    child_info = get_for_child(schoolkid)
     lessons = Lesson.objects.filter(
         year_of_study=child.year_of_study, group_letter=child.group_letter)
     last_lesson = lessons.filter(
